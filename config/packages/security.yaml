@@ -1,0 +1,59 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        from_database:
+            id: App\Security\UserProvider\LoginUserWithEmailOrPhone
+
+    encoders:
+        App\Entity\User: sodium
+
+    role_hierarchy:
+        ROLE_BO_USER: ROLE_USER
+        ROLE_FO_USER: ROLE_USER
+
+    access_decision_manager:
+        strategy: unanimous
+        allow_if_all_abstain: false
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        fo:
+            anonymous: true
+            provider: from_database
+            switch_user: true
+            form_login:
+                login_path: app_login
+                check_path: app_login
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                # target: app_any_route
+
+            user_checker: App\Security\RdiUserChecker
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/connexion, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/corp/creer-ma-societe, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/corp/invitation-observateur-externe/, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/corp/inscription, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/lab/creer-mon-cahier-labo, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/lab/inscription, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/reinitialiser-mot-de-passe, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/recommander-rdi-manager, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/inscription, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/l/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/corp/admin/, roles: SOCIETE_ADMIN }
+        - { path: ^/lab/admin/, roles: LABO_ADMIN }
+        - { path: ^/back-office, roles: ROLE_BO_USER }
+        - { path: ^/$, roles: ROLE_USER }
+        - { path: ^/, roles: ROLE_FO_USER }

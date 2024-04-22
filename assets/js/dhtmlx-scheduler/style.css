@@ -1,0 +1,162 @@
+.dhtmlx_popup_text li {
+    text-align: left;
+}
+
+.dhx_cal_ltext::-webkit-scrollbar {
+    width: 5px;
+    background: #ce352c;
+}
+
+.dhx_cal_ltext::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+.dhx_cal_ltext::-webkit-scrollbar-thumb {
+    background-color: #ce352c;
+    border-radius: 20px;
+}
+
+.dhx_cal_light.dhx_cal_light_wide{
+    border-radius: 1rem !important;
+}
+
+.dhx_cal_light_wide .dhx_cal_lsection{
+    width: 125px;
+}
+.dhx_cal_light_readonly .dhx_cal_ltext{
+    overflow-y: auto !important;
+}
+.dhx_title{
+    width: 100% !important;
+    padding-right: 13px !important;
+}
+.dhx_multi_select_control {
+    padding: 5px 0 0 10px;
+}
+.dhx_multi_select_control input {
+    vertical-align: middle;
+    top: -1px;
+    margin-right: 5px;
+}
+.dhx_multi_select_control label {
+    margin-right: 12px;
+}
+.dhx_agenda_line div{
+    width: 300px;
+}
+.dhx_v_border{
+    left: 299px;
+}
+.container_event_text{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+}
+.container_event_text .links_event_text{
+    font-size: 1.2rem;
+    text-align: center;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+}
+.dhx_cal_tab.export_agenda_tab{
+    width: auto;
+}
+.dhx_ics_calendar_btn_set{
+    background-color: #9FC437;
+    color: white;
+}
+.dhx_agenda_line div {
+    width: 250px;
+}
+.dhx_agenda_area .dhx_v_border{
+    left: 248px !important;
+}
+.dhx_agenda_area .dhx_agenda_event_time{
+    text-align: left;
+    padding-left: 15px;
+}
+.dhx_cal_event_line.meeting_projetEvent, .dhx_cal_event.meeting_projetEvent div{
+    background-color: #0288d1 !important;
+    color: white !important;
+}
+.dhx_cal_event_line.event_projetEvent, .dhx_cal_event.event_projetEvent div{
+    background-color: #0fc4a7 !important;
+    color: white !important;
+}
+.dhx_cal_event_line.absence_projetEvent, .dhx_cal_event.absence_projetEvent div{
+    background-color: #a29e9b !important;
+    color: white !important;
+}
+.dhx_cal_event_line.personal_projetEvent, .dhx_cal_event.personal_projetEvent div{
+    background-color: #9800A9 !important;
+    color: white !important;
+}
+.dhx_cal_event_line.other_projetEvent, .dhx_cal_event.other_projetEvent div{
+    background-color: #ff5722 !important;
+    color: white !important;
+}
+.dhx_cal_event_clear.meeting_projetEvent{
+    color: #0280ca !important;
+}
+.dhx_cal_event_clear.event_projetEvent{
+    color: #0fbea1 !important;
+}
+.dhx_cal_event_clear.absence_projetEvent{
+    color: #a29e9b !important;
+}
+.dhx_cal_event_clear.personal_projetEvent{
+    color: #9800A9 !important;
+}
+.dhx_cal_event_clear.other_projetEvent{
+    color: #ff5722 !important;
+}
+
+.dhx_cal_event_line.highlighted_event, .dhx_cal_event.highlighted_event div{
+    background-color: #ff0004 !important;
+    box-shadow: 0px 0px 40px 52px rgba(0,0,0,0.31) inset;
+    -webkit-box-shadow: 0px 0px 40px 52px rgba(0,0,0,0.31) inset;
+    -moz-box-shadow: 0px 0px 40px 52px rgba(0,0,0,0.31) inset;
+    color: white !important;
+}
+.dhx_cal_event_clear.highlighted_event{
+    color: #ff0004 !important;
+}
+
+.dhx_cal_light.dhx_cal_light_readonly .select-all{
+    display: none !important;
+}
+
+.dhtmlXTooltip.tooltip{
+    max-width: 30rem;
+}
+
+/* form */
+form[name='filter_user_event'] {
+    word-break: break-word !important;
+    overflow: hidden !important;
+}
+form[name='filter_user_event'] #filter_user_event_users {
+    max-height: 18rem;
+    overflow-y: auto;
+}
+
+/* vue tableau */
+#tab-table .nav a[href="#tab-next-events"]{
+    color: rgb(33, 123, 41);
+    font-weight: 600;
+}
+#tab-table .nav a[href="#tab-next-events"].active{
+    background-color: rgba(40, 163, 49, 0.25);
+    color: black;
+}
+#tab-table .nav a[href="#tab-old-events"]{
+    color: rgb(0, 95, 190);
+    font-weight: 600;
+}
+#tab-table .nav a[href="#tab-old-events"].active{
+    background-color: rgba(0, 123, 255, 0.25);
+    color: black;
+}

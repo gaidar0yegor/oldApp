@@ -1,0 +1,1 @@
+import './js/dhtmlx-scheduler/projet-events';

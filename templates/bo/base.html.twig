@@ -1,0 +1,28 @@
+{% extends 'base_html.html.twig' %}
+
+{% block title %}Back office | {{ parent() }}{% endblock %}
+
+{% block base_body %}
+    {% include('bo/_menu_horizontal.html.twig') %}
+
+    <div class="container main-container">
+        {% include '_flash_messages.html.twig' %}
+
+        {% block body %}
+        {% endblock %}
+    </div>
+
+    {% include('_footer.html.twig') %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_link_tags('back-office') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('back-office') }}
+{% endblock %}

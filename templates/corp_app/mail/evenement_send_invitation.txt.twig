@@ -1,0 +1,7 @@
+L’évènement {{ evenement.text }} a été créé par {{ evenement.createdBy.user.shortname }} {% if evenement.projet %}sur le projet {{ evenement.projet.acronyme }}{% endif %}
+
+{{ evenement.description|raw }}
+
+Voir sur RDI-Manager :
+
+{{ url('corp_app_fo_current_user_events', { 'event' : evenement.id, }) }}

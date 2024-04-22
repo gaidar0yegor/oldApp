@@ -1,0 +1,58 @@
+.rdi-card-choice {
+    position: relative;
+
+    .fa {
+        opacity: 0.15;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+
+    .form-group {
+        margin: 0;
+        height: 100%;
+    }
+
+    .form-check {
+        height: 100%;
+        padding: 0;
+
+        .form-check-input {
+            position: relative;
+            margin-left: 0;
+        }
+    }
+
+    &.rdi-card-choice-small {
+
+        .fa {
+            float: left;
+            margin-right: 0.5em;
+            margin-top: 0.3em;
+        }
+
+        .card-body {
+            padding: 0.75em;
+        }
+    }
+
+    &.rdi-card-choice-large {
+
+        .fa {
+            position: absolute;
+            font-size: 4em;
+        }
+
+        .form-check {
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: flex-start;
+
+            .form-check-label {
+                text-align: center;
+                font-size: 0.9em;
+                padding-top: 3em;
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+default:
+    suites:
+        default:
+            contexts:
+                - App\Tests\Behat\RdiContext
+                - App\Tests\Behat\RdiLicenseContext
+                - behatch:context:browser
+                - behatch:context:rest
+                - behatch:context:json
+                - behatch:context:table
+                - behatch:context:debug:
+                    screenshotDir: var
+
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            bootstrap: tests/bootstrap.php
+        Behat\MinkExtension:
+            # To debug behat tests with "Then show last response", enable:
+            #show_cmd: firefox %s
+            files_path: ./features/
+            sessions:
+                symfony:
+                    symfony: ~
+        Behatch\Extension: ~

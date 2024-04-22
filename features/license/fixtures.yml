@@ -1,0 +1,51 @@
+App\Entity\User:
+    _user:
+        nom: Eureka
+        prenom: User
+        email: user@societe.dev
+        password: user
+    _cdp:
+        nom: Eureka
+        prenom: Chef de projet
+        email: cdp@societe.dev
+        password: cdp
+
+App\Entity\SocieteUser:
+    user:
+        user: '@_user'
+        role: <(App\Security\Role\RoleSociete::USER)>
+        societe: '@societe'
+    cdp:
+        user: '@_cdp'
+        role: <(App\Security\Role\RoleSociete::CDP)>
+        societe: '@societe'
+
+App\Entity\SocieteUserPeriod:
+    cdp_period:
+        societeUser: '@cdp'
+        dateEntry: <(new DateTime("2010-11-01"))>
+        dateLeave: null
+    user_period:
+        societeUser: '@user'
+        dateEntry: <(new DateTime("2010-11-01"))>
+        dateLeave: null
+
+App\Entity\Projet:
+    projet:
+        titre: Projet
+        acronyme: PTEST
+        societe: '@societe'
+
+App\Entity\ProjetParticipant:
+    cdp_projet:
+        societeUser: '@cdp'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::CDP)>
+    user_projet:
+        societeUser: '@user'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::OBSERVATEUR)>
+
+App\Entity\Societe:
+    societe:
+        raisonSociale: Société

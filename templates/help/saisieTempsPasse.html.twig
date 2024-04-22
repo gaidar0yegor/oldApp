@@ -1,0 +1,13 @@
+{% extends 'help/layout.html.twig' %}
+
+{% block content %}
+    <h5 class="card-title">{{ 'enter_your_time_spent'|trans}} </h5>
+
+    <p class="card-text">
+        {{ 'time_spend_one'|trans }}
+        <ul>
+            <li>{{ 'time_spend_two'|trans|raw|striptags('<strong>')|raw }}</li>
+            <li>{{ 'time_spend_three'|trans|raw|striptags('<strong>')|raw }}</li>
+        </ul>
+    </p>
+{% endblock %}

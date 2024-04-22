@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="{{ path('corp_app_bo_home') }}">
+        <img src="{{ asset('build/assets/img/Logo-RDI-blanc.png') }}" alt="RDI manager logo">
+        <span class="bo-title">Back office</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item {{ activeOn('corp_app_bo_dashboard') }}">
+                <a class="nav-link" href="{{ path('corp_app_bo_dashboard') }}">Tableau de bord</a>
+            </li>
+            <li class="nav-item {{ activeOn('corp_app_bo_stats') }}">
+                <a class="nav-link" href="{{ path('corp_app_bo_stats') }}">Statistiques</a>
+            </li>
+            <li class="nav-item {{ activeOn('corp_app_bo_societes', 'corp_app_bo_societe', 'corp_app_bo_societes_creer') }}">
+                <a class="nav-link" href="{{ path('corp_app_bo_societes') }}">Sociétés</a>
+            </li>
+        </ul>
+
+
+
+        <div class="btn-group user-menu">
+            <a href="{{ path('corp_app_bo_patchnote_list') }}" class="btn btn-outline-warning {{ activeOn('corp_app_bo_patchnote_list', 'corp_app_bo_patchnote_new', 'corp_app_bo_patchnote_update') }}">
+                Patch note
+            </a>
+            <a href="#" class="btn btn-outline-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Back office | {{ app.user.prenom }}
+                <i class="fa fa-lg fa-user-circle-o" aria-hidden="true"></i>
+            </a>
+            <div class="dropdown-menu">
+                {% if is_granted('ROLE_FO_USER') %}
+                    <a
+                        class="dropdown-item {{ activeOn('app_home') }}"
+                        href="{{ path('app_home') }}"
+                    >
+                        <i class="fa fa-rocket" aria-hidden="true"></i>Front Office
+                    </a>
+                    <div class="dropdown-divider"></div>
+                {% endif %}
+                <a
+                    class="dropdown-item"
+                    href="{{ path('app_logout') }}"
+                >
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

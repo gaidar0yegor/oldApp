@@ -1,0 +1,79 @@
+name: Testing
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_ROOT_PASSWORD: symfony
+          MYSQL_DATABASE: symfony
+        ports:
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        extensions: intl
+        ini-values: post_max_size=256M, max_execution_time=180
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      if: steps.composer-cache.outputs.cache-hit != 'true'
+      run: composer install --prefer-dist --no-progress --no-suggest && php bin/console assets:install
+
+    - name: Setup node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '12'
+        cache: 'yarn'
+
+    - name: Install node dependencies
+      run: yarn && yarn build
+
+    - name: Run unit tests
+      run: php bin/phpunit
+
+    - name: Run integration tests
+      run: php vendor/bin/behat
+
+    - name: Check migrations are up to date
+      run: |
+        php bin/console doctrine:database:create --if-not-exists
+        php bin/console doctrine:migrations:migrate --no-interaction
+        php bin/console doctrine:schema:update --dump-sql
+        php bin/console doctrine:schema:update --dump-sql | grep "Nothing to update" || exit 1
+      env:
+        DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
+
+    - name: Create build artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build
+        path: public/build/
+        retention-days: 7

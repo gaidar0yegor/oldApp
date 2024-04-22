@@ -1,0 +1,6 @@
+Rappel : {{ rappel.rappelDate |format_date(pattern='d MMMM Y \à HH:MM', locale=rappel.user.locale) }} - {{ rappel.titre }}
+{{ rappel.description }}
+
+Voir sur RDI-Manager :
+
+{{ url('corp_app_fo_rappel_list') }}

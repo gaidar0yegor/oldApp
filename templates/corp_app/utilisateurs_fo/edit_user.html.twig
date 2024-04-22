@@ -1,0 +1,125 @@
+{% extends 'corp_app/base.html.twig' %}
+
+{% block title %}{{ 'edit_user_user'|trans({'%user%': societeUser.user.fullnameOrEmail}) }} | {{ parent() }}{% endblock %}
+
+{% block body %}
+
+<h1>{{ 'edit_user_user'|trans({'%user%': societeUser.user.fullnameOrEmail}) }}</h1>
+
+{{ form_start(form) }}
+{{ form_errors(form) }}
+
+<div class="row row-flex">
+    <div class="col-sm-6 mb-3 {{ is_granted(constant('App\\Security\\Role\\RoleSociete::ADMIN')) ? "" : "d-none" }}">
+        {{ form_row(form.role) }}
+    </div>
+    <div class="col-sm-6 mb-3">
+        {{ form_row(form.coutEtp) }}
+    </div>
+    <div class="col-md-4 col-sm-12 mb-3">
+        {{ form_row(form.heuresParJours) }}
+    </div>
+    <div class="col-md-4 col-sm-12 mb-3">
+        {{ form_row(form.workStartTime) }}
+    </div>
+    <div class="col-md-4 col-sm-12 mb-3">
+        {{ form_row(form.workEndTime) }}
+    </div>
+    <div class="col-sm-12"><hr class="w-75 mt-1 mb-3"></div>
+    <div class="col-sm-12 mb-3">
+        {{ form_row(form.societeUserPeriods) }}
+    </div>
+</div>
+
+<div class="d-flex justify-content-around">
+    <div class="form-group">
+        <a href="{{ path('corp_app_fo_utilisateurs') }}" class="btn btn-outline-warning">{{ 'cancel'|trans }}</a>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">{{ 'update'|trans }}</button>
+    </div>
+</div>
+{{ form_end(form) }}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card border-danger my-4">
+            <div class="card-body">
+                {% if societeUser.enabled %}
+                    <h5 class="card-title text-danger">{{ 'disable_account'|trans }}</h5>
+                    <p class="card-text text-danger">
+                        {{ 'disable_account_explain'|trans({'%user%': societeUser.user.fullnameOrEmail}) }}
+                    </p>
+                    {% if projetsAsCdp | length > 0 %}
+                        <hr>
+                        <p class="card-text">
+                            {{ 'disable_account_with_CDP_roles_explain'|trans({'%user%': societeUser.user.fullnameOrEmail}) }}
+                        </p>
+                        <ul>
+                            {% for projetParticipant in projetsAsCdp %}
+                                <li>
+                                    <a href="{{ path('corp_app_fo_projet', {'id': projetParticipant.projet.id}) }}">{{ projetParticipant.projet.titre }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <form
+                        action="{{ path('corp_app_fo_utilisateur_disable', { id: societeUser.id }) }}"
+                        method="POST"
+                        class="form"
+                    >
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token('disable_user_' ~ societeUser.id) }}" />
+                        <input
+                            type="submit"
+                            value="{{ 'disable_account'|trans }}"
+                            class="btn btn-outline-warning"
+                            {% if userContext.societeUser == societeUser %}
+                                disabled
+                                title="{{ 'cannot_disable_self'|trans }}"
+                            {% elseif projetsAsCdp | length > 0 %}
+                                disabled
+                                title="{{ 'cannot_disable_cdp'|trans }}"
+                            {% endif %}
+                        />
+                    </form>
+                {% else %}
+                    <h5 class="card-title">{{ 're_enable_account'|trans }}</h5>
+                    <p class="card-text">
+                        {{ 're_enable_account_explain'|trans({'%user%': societeUser.user.fullnameOrEmail}) }}
+                    </p>
+                    <form
+                        action="{{ path('corp_app_fo_utilisateur_enable', { id: societeUser.id }) }}"
+                        method="POST"
+                        class="form d-inline-block"
+                    >
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token('re_enable_user_' ~ societeUser.id) }}" />
+                        <input type="submit" value="{{ 're_enable_account'|trans }}" class="btn btn-warning" />
+                    </form>
+                    <a
+                            href="{{ path('corp_app_fo_utilisateur_delete', {'id': societeUser.id}) }}"
+                            class="btn btn-danger"
+                    >{{ 'verify_and_delete_user'|trans }}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+    {% if putDateLeaveForDisabling %}
+    <div class="input-date-leave-popup rdi-popup bg-modal">
+        <div class="content">
+            <div class="rdi-popup-header corp_app_bg">
+                <h6>Désactiver le compte</h6>
+            </div>
+            <div class="rdi-popup-body">
+                <p>{{ 'verif_date_leave_on_disable_user'|trans({'user': societeUser.user.fullnameOrEmail}) }}</p>
+                <form class="d-flex flex-column justify-content-center align-items-center" method="post" action="{{ path('corp_app_fo_utilisateur_disable', {'id': societeUser.id }) }}">
+                    <input type="text" name="dateLeave" class="date-picker numeric-format form-control" autocomplete="off"/>
+                    <button type="submit" class="btn btn-success mt-3">Enregistrer et désactiver</button>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token('date_leave_disable_societe_user_' ~ societeUser.id) }}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

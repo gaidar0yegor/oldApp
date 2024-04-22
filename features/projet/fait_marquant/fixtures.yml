@@ -1,0 +1,94 @@
+App\Entity\User:
+    _observateur:
+        nom: Eureka
+        prenom: Observateur
+        email: observateur@societe.dev
+        password: observateur
+    _contributeur:
+        nom: Eureka
+        prenom: Contributeur
+        email: contributeur@societe.dev
+        password: contributeur
+    _contributeur2:
+        nom: Eureka
+        prenom: Contributeur2
+        email: contributeur2@societe.dev
+        password: contributeur2
+    _cdp:
+        nom: Eureka
+        prenom: Chef de projet
+        email: cdp@societe.dev
+        password: cdp
+
+App\Entity\SocieteUser:
+    observateur:
+        user: '@_observateur'
+        role: <(App\Security\Role\RoleSociete::USER)>
+        societe: '@societe'
+    contributeur:
+        user: '@_contributeur'
+        role: <(App\Security\Role\RoleSociete::USER)>
+        societe: '@societe'
+    contributeur2:
+        user: '@_contributeur2'
+        role: <(App\Security\Role\RoleSociete::USER)>
+        societe: '@societe'
+    cdp:
+        user: '@_cdp'
+        role: <(App\Security\Role\RoleSociete::CDP)>
+        societe: '@societe'
+
+App\Entity\SocieteUserPeriod:
+    observateur_period:
+        societeUser: '@observateur'
+        dateEntry: null
+        dateLeave: null
+    cdp_period:
+        societeUser: '@cdp'
+        dateEntry: null
+        dateLeave: null
+    contributeur_period:
+        societeUser: '@contributeur'
+        dateEntry: null
+        dateLeave: null
+    contributeur2_period:
+        societeUser: '@contributeur2'
+        dateEntry: null
+        dateLeave: null
+
+App\Entity\Projet:
+    projet:
+        titre: Projet
+        acronyme: PTEST
+        societe: '@societe'
+
+App\Entity\FaitMarquant:
+    fait:
+        titre: Fait marquant déjà créé
+        description: Contenu du fait marquant déjà créé.
+        date: <(new DateTime("2020-11-09"))>
+        createdBy: '@contributeur'
+        projet: '@projet'
+
+App\Entity\ProjetParticipant:
+    projet_observateur:
+        societeUser: '@observateur'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::OBSERVATEUR)>
+    projet_contributeur:
+        societeUser: '@contributeur'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::CONTRIBUTEUR)>
+    projet_contributeur2:
+        societeUser: '@contributeur2'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::CONTRIBUTEUR)>
+    projet_cdp:
+        societeUser: '@cdp'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::CDP)>
+
+App\Entity\Societe:
+    societe:
+        raisonSociale: Société
+        siret: 111111111

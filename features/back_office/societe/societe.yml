@@ -1,0 +1,25 @@
+App\Entity\User:
+    bo_user:
+        nom: Eureka
+        prenom: User
+        email: user@bo.dev
+        password: user
+        roles: [ROLE_BO_USER]
+
+App\Entity\SocieteUser:
+    admin:
+        user: ~
+        role: <(App\Security\Role\RoleSociete::ADMIN)>
+        societe: '@societe'
+        invitationToken: codeInvitationToken
+        invitationEmail: admin@societe.dev
+
+App\Entity\SocieteUserPeriod:
+    admin_period:
+        societeUser: '@admin'
+        dateEntry: null
+        dateLeave: null
+
+App\Entity\Societe:
+    societe:
+        raisonSociale: SociétéTest

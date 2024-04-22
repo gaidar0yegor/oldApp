@@ -1,0 +1,11 @@
+App\Entity\User:
+    _user:
+        nom: Eureka
+        prenom: User
+        email: user@societe.dev
+        password: user
+    _user_phone:
+        nom: Eureka
+        prenom: UserPhone
+        telephone: <(libphonenumber\PhoneNumberUtil::getInstance()->parse('06 05 04 03 02', 'FR'))>
+        password: user

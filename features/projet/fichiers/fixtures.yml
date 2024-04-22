@@ -1,0 +1,108 @@
+App\Entity\User:
+    _observateur:
+        nom: Eureka
+        prenom: Observateur
+        email: observateur@societe.dev
+        password: observateur
+    _contributeur:
+        nom: Eureka
+        prenom: Contributeur
+        email: contributeur@societe.dev
+        password: contributeur
+    _cdp:
+        nom: Eureka
+        prenom: Chef de projet
+        email: cdp@societe.dev
+        password: cdp
+    _pas_acces:
+        nom: Eureka
+        prenom: Pas d'accès
+        email: pas_acces@societe.dev
+        password: pas_acces
+
+App\Entity\SocieteUser:
+    observateur:
+        user: '@_observateur'
+        role: <(App\Security\Role\RoleSociete::USER)>
+        societe: '@societe'
+    contributeur:
+        user: '@_contributeur'
+        role: <(App\Security\Role\RoleSociete::USER)>
+        societe: '@societe'
+    cdp:
+        user: '@_cdp'
+        role: <(App\Security\Role\RoleSociete::USER)>
+        societe: '@societe'
+    pas_acces:
+        user: '@_pas_acces'
+        role: <(App\Security\Role\RoleSociete::USER)>
+        societe: '@societe'
+
+App\Entity\SocieteUserPeriod:
+    observateur_period:
+        societeUser: '@observateur'
+        dateEntry: <(new DateTime("2020-01-01"))>
+        dateLeave: null
+    contributeur_period:
+        societeUser: '@contributeur'
+        dateEntry: <(new DateTime("2020-01-01"))>
+        dateLeave: null
+    cdp_period:
+        societeUser: '@cdp'
+        dateEntry: <(new DateTime("2020-01-01"))>
+        dateLeave: null
+    pas_acces_period:
+        societeUser: '@pas_acces'
+        dateEntry: <(new DateTime("2020-01-01"))>
+        dateLeave: null
+
+App\Entity\Fichier:
+    file_fichier_de_contributeur:
+        nomMd5: xxx.txt
+        nomFichier: fichier_de_contributeur.txt
+    file_fichier_de_cdp:
+        nomMd5: yyy.txt
+        nomFichier: fichier_de_cdp.txt
+
+App\Entity\FichierProjet:
+    fichier_de_contributeur:
+        fichier: '@file_fichier_de_contributeur'
+        uploadedBy: '@contributeur'
+        projet: '@projet'
+        accessesChoices: ['all']
+        societeUsers: ['@cdp', '@contributeur', '@observateur']
+    fichier_de_cdp:
+        fichier: '@file_fichier_de_cdp'
+        uploadedBy: '@cdp'
+        projet: '@projet'
+        accessesChoices: ['all']
+        societeUsers: ['@cdp', '@contributeur', '@observateur']
+
+App\Entity\Projet:
+    projet:
+        titre: Projet
+        acronyme: PTEST
+        societe: '@societe'
+        projetCollaboratif: true
+        projetPpp: false
+        projetInterne: true
+        dateDebut: <(new DateTime("2020-11-09"))>
+
+App\Entity\ProjetParticipant:
+    observateur_projet:
+        societeUser: '@observateur'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::OBSERVATEUR)>
+    contributeur_projet:
+        societeUser: '@contributeur'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::CONTRIBUTEUR)>
+    cdp_projet:
+        societeUser: '@cdp'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::CDP)>
+
+App\Entity\Societe:
+    societe:
+        raisonSociale: Société
+        siret: 111111111

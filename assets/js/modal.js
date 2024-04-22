@@ -1,0 +1,5 @@
+import $ from 'jquery';
+
+$('#myModal').on('shown.bs.modal', function () {
+    $('#myInput').trigger('focus')
+})

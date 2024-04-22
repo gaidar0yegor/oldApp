@@ -1,0 +1,78 @@
+App\Entity\User:
+    _user:
+        nom: Eureka
+        prenom: User
+        email: user@societe.dev
+        password: user
+    _cdp:
+        nom: Eureka
+        prenom: Chef de projet
+        email: cdp@societe.dev
+        password: cdp
+    _admin:
+        nom: Eureka
+        prenom: Admin
+        email: admin@societe.dev
+        password: admin
+
+App\Entity\SocieteUser:
+    user:
+        user: '@_user'
+        societe: '@societe'
+        role: <(App\Security\Role\RoleSociete::USER)>
+    cdp:
+        user: '@_cdp'
+        societe: '@societe'
+        role: <(App\Security\Role\RoleSociete::CDP)>
+    admin:
+        user: '@_admin'
+        societe: '@societe'
+        role: <(App\Security\Role\RoleSociete::ADMIN)>
+
+App\Entity\SocieteUserPeriod:
+    user_period:
+        societeUser: '@user'
+        dateEntry: <(new DateTime("2010-11-01"))>
+        dateLeave: <(new DateTime("2020-11-01"))>
+    cdp_period:
+        societeUser: '@cdp'
+        dateEntry: <(new DateTime("2010-11-01"))>
+        dateLeave: <(new DateTime("2020-11-01"))>
+    admin_period:
+        societeUser: '@admin'
+        dateEntry: <(new DateTime("2010-11-01"))>
+        dateLeave: <(new DateTime("2020-11-01"))>
+
+App\Entity\Projet:
+    projet:
+        titre: Projet
+        acronyme: PTEST
+        societe: '@societe'
+
+App\Entity\FaitMarquant:
+    fait_user:
+        titre: FM_user
+        description: Contenu du fait marquant déjà créé.
+        date: <(new DateTime("2020-11-09"))>
+        createdBy: '@user'
+        projet: '@projet'
+    fait_cdp:
+        titre: FM_cdp
+        description: Contenu du fait marquant déjà créé.
+        date: <(new DateTime("2020-11-09"))>
+        createdBy: '@cdp'
+        projet: '@projet'
+
+App\Entity\ProjetParticipant:
+    user_projet:
+        societeUser: '@user'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::CONTRIBUTEUR)>
+    cdp_projet:
+        societeUser: '@cdp'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::CDP)>
+
+App\Entity\Societe:
+    societe:
+        raisonSociale: Société

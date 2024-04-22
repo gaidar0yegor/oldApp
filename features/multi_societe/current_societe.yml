@@ -1,0 +1,57 @@
+App\Entity\User:
+    _user:
+        nom: Eureka
+        prenom: User
+        email: user@societe.dev
+        password: user
+        currentSocieteUser: '@user_societe1'
+
+    _user_disabled:
+        nom: Eureka
+        prenom: UserDisabled
+        email: user_disabled@societe.dev
+        password: user_disabled
+        currentSocieteUser: '@user_disabled_societe1'
+
+App\Entity\SocieteUser:
+    user_societe0:
+        user: '@_user'
+        societe: '@societe0'
+        role: <(App\Security\Role\RoleSociete::ADMIN)>
+    user_societe1:
+        user: '@_user'
+        societe: '@societe1'
+        role: <(App\Security\Role\RoleSociete::USER)>
+    user_disabled_societe0:
+        user: '@_user_disabled'
+        societe: '@societe0'
+        role: <(App\Security\Role\RoleSociete::ADMIN)>
+    user_disabled_societe1:
+        user: '@_user_disabled'
+        societe: '@societe1'
+        role: <(App\Security\Role\RoleSociete::USER)>
+        enabled: false
+
+App\Entity\SocieteUserPeriod:
+    user_societe0_period:
+        societeUser: '@user_societe0'
+        dateEntry: null
+        dateLeave: null
+    user_societe1_period:
+        societeUser: '@user_societe1'
+        dateEntry: null
+        dateLeave: null
+    user_disabled_societe0_period:
+        societeUser: '@user_disabled_societe0'
+        dateEntry: null
+        dateLeave: null
+    user_disabled_societe1_period:
+        societeUser: '@user_disabled_societe1'
+        dateEntry: null
+        dateLeave: null
+
+App\Entity\Societe:
+    societe0:
+        raisonSociale: Société0
+    societe1:
+        raisonSociale: Société1

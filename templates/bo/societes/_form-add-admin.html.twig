@@ -1,0 +1,26 @@
+<span>Ajouter un autre administrateur</span>
+
+{{ form_start(formUserEmail) }}
+{{ form_errors(formUserEmail) }}
+
+<div class="row mb-4 mt-2">
+    <div class="col-lg-12">
+        {{ form_widget(formUserEmail.invitationEmail, {
+            'attr': {
+                'placeholder': 'Email de l\'administrateur'
+            }
+        }) }}
+    </div>
+    <div class="col-lg-8">
+        {{ form_widget(formUserEmail.societeUserPeriods) }}
+    </div>
+    <div class="col-lg-4 d-flex flex-column justify-content-center align-items-center">
+        <button type="submit" class="btn btn-success">
+            <i class="fa fa-user-plus" aria-hidden="true"></i>
+            Inviter
+            <span class="d-none d-sm-inline">un autre administrateur</span>
+        </button>
+    </div>
+</div>
+
+{{ form_end(formUserEmail) }}

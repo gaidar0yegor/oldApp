@@ -1,0 +1,13 @@
+<span class="badge
+    {% if projet.statut == "ended" %}
+    badge-success
+    {% elseif projet.statut == "suspended" %}
+    badge-warning
+    {% elseif projet.statut == "upcoming" %}
+    badge-secondary
+    {% elseif projet.statut == "in_progress" %}
+    badge-primary
+    {% endif %}
+">
+{{ projet.statut | trans }}
+</span>

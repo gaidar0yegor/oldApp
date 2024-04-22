@@ -1,0 +1,57 @@
+{% set hasTryLicense = hasTryLicense(userContext.societeUser.societe) %}
+{% set hasNotActiveLicense = not hasActiveLicense(userContext.societeUser.societe) or hasQuotaOverflow(userContext.societeUser.societe) %}
+
+<section id="buttom-fixed-alerts" class="custom-fixed-alerts">
+
+	{% if hasTryLicense or hasNotActiveLicense %}
+		{% if hasTryLicense %}
+			<div class="custom-alert">
+				<i class="fa fa-warning text-warning mt-1" aria-hidden="true"></i>
+				<div class="ml-2">
+					Vous utilisez une offre d'essai de RDI-Manager.
+				</div>
+			</div>
+		{% endif %}
+		{% if hasNotActiveLicense %}
+			<div class="custom-alert">
+				<i class="fa fa-warning text-warning" aria-hidden="true"></i>
+				<div class="ml-2">
+					Mettre à jour votre licence : Quota dépassé ou Licence expirée.<br><a href="https://rdimanager.com/pages/contact.html" target="_blank">Nous contacter</a>
+				</div>
+			</div>
+		{% endif %}
+	{% endif %}
+
+</section>
+
+<section id="center-fixed-alerts" class="custom-fixed-alerts">
+
+	{% if (userContext.societeUser.societeUserPeriods | length == 0) or
+    (userContext.societeUser.societeUserPeriods | length > 0 and userContext.societeUser.societeUserPeriods.first.dateEntry is null) %}
+
+		{% if is_granted(constant('App\\Security\\Role\\RoleSociete::ADMIN')) or userContext.societeUser.superiorFo %}
+			<div class="input-date-entry-popup rdi-popup bg-modal">
+				<div class="content">
+					<div class="rdi-popup-header corp_app_bg">
+						<h6><i class="fa fa-exclamation-triangle text-warning" aria-hidden="true"></i>&emsp;Finalisez votre inscription</h6>
+					</div>
+					<div class="rdi-popup-body">
+						<p>Saisissez votre date d'entrée dans la société.</p>
+						<form class="d-flex flex-column justify-content-center align-items-center" method="post" action="{{ path('api_societe_user_date_entree_update', {'societeId': userContext.societeUser.societe.id, 'societeUserId': userContext.societeUser.id }) }}" onsubmit="return confirm('Enregistrer votre date d\'entrée dans la société ?');">
+							<input type="text" name="date-entree" class="date-picker numeric-format form-control" autocomplete="off"/>
+							<button type="submit" class="btn btn-success mt-3">Valider</button>
+							<input type="hidden" name="token" value="{{ csrf_token('update-date-entree-admin') }}"/>
+						</form>
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<div class="custom-alert">
+				<i class="fa fa-exclamation-triangle text-warning" aria-hidden="true"></i>
+				Pour finaliser votre inscription sur la plateforme, veuillez contacter votre administrateur RDI-Manager ou votre N+1 qui indiquera votre date d’entrée dans la société.
+			</div>
+		{% endif %}
+
+	{% endif %}
+
+</section>

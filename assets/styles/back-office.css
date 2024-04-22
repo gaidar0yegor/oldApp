@@ -1,0 +1,53 @@
+.navbar-brand {
+    position: relative;
+}
+.bo-title {
+    position: absolute;
+    right: 0;
+    bottom: -1em;
+    font-size: 0.6em;
+    font-weight: bold;
+}
+
+.notification .card-body {
+    overflow-y: scroll;
+    max-height: 300px;
+}
+
+.notification .card-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+.notification .card-body::-webkit-scrollbar-thumb {
+    background: #e62117;
+    border-radius: 10px;
+}
+.notification .card-body::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+#UserCountry_getCountry table tbody {
+    display: block;
+    height: 276px;
+    overflow: auto;
+}
+#UserCountry_getCountry table thead, #UserCountry_getCountry table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+#UserCountry_getCountry table thead {
+    width: 100%;
+}
+#patchnotes_list_dt tr.dtrg-group.dtrg-level-0 {
+    background-color: gray;
+    color: white;
+    font-weight: bold;
+}
+@media (min-width: 768px) {
+    #UserCountry_getCountry table thead{
+        border-right: 1px solid gray;
+    }
+    #UserCountry_getCountryGraph table thead{
+        border-left: 1px solid gray;
+    }
+}

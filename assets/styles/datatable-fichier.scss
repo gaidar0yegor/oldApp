@@ -1,0 +1,29 @@
+.fichier-projets-container {
+  .fichier-projet-children-popup{
+    display: none;
+
+    .rdi-popup-header{
+      color: black;
+    }
+  }
+}
+.fichier-projets-container-tfoot {
+  .add-file-btn-input-group{
+    width: unset;
+
+    button{
+      height: 100%;
+
+      &[data-upload-type="localFile"]{
+        border-bottom-right-radius: unset;
+        border-top-right-radius: unset;
+        border-right: unset;
+      }
+
+      &[data-upload-type="externalLink"]{
+        border-bottom-left-radius: unset;
+        border-top-left-radius: unset;
+      }
+    }
+  }
+}

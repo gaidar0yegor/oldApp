@@ -1,0 +1,25 @@
+{% set cra = societeUser.cras|filter(cra => cra.mois|format_date(pattern='yyyy-MM') == yearMonth)|first %}
+{% set isUserBelongingToSociete = isUserBelongingToSociete(societeUser, yearMonth ~ '-01') %}
+
+{% if not isUserBelongingToSociete %}
+    <td class="table-grey-light text-center">
+        <span class="text-grey" title="Non applicable">
+            <i class="fa fa-minus" aria-hidden="true"></i>
+        </span>
+    </td>
+{% elseif cra and cra.tempsPassesSubmitted %}
+    <td class="table-success text-center">
+        <span class="text-success" title="Validé le {{ cra.tempsPassesModifiedAt|format_date(pattern='d MMMM') }}">
+            <i class="fa fa-check" aria-hidden="true"></i>
+        </span>
+    </td>
+{% elseif (yearMonth ~ '-01')|date('Ym') < 'now'|date('Ym') %}
+    <td class="table-danger text-center">
+        <span class="text-danger" title="Pas encore validé">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </span>
+    </td>
+{% else %}
+    <td>
+    </td>
+{% endif %}

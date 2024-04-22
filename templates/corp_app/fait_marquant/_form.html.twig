@@ -1,0 +1,62 @@
+{{ form_start(form) }}
+
+<div class="row">
+    {{ form_errors(form) }}
+    <div class="col-md-9 col-sm-12">
+        {{ form_row(form.titre) }}
+    </div>
+    <div class="col-md-3 col-sm-12">
+        {{ form_row(form.date) }}
+    </div>
+    <div class="col-md-12">
+        {{ form_row(form.geolocalisation) }}
+    </div>
+    <div class="col-md-12">
+        <div class="input-group flex-nowrap mb-3">
+            <span class="input-group-text">
+                <i class="fa fa-tasks" aria-hidden="true"></i>
+            </span>
+            <div class="overflow-hidden flex-grow-1">
+                {{ form_widget(form.projetPlanningTask) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        {{ form_row(form.description) }}
+        <span id="custom_ckeditor_max_char" class="d-none"
+              data-limit="{{ userContext.societeUser.societe.faitMarquantMaxDesc }}"
+              data-limitBlocking="{{ userContext.societeUser.societe.faitMarquantMaxDescIsblocking }}"></span>
+    </div>
+    <div class="col-md-12 mb-3">
+        {{ form_row(form.fichierProjets) }}
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+            </span>
+            <div class="overflow-hidden flex-grow-1">
+                {{ form_widget(form.sendedToEmails) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text">
+                <i class="fa fa-share-square" aria-hidden="true"></i>
+            </span>
+            <div class="overflow-hidden flex-grow-1">
+                {{ form_widget(form.extraSendedToEmails) }}
+            </div>
+        </div>
+        <small class="form-text text-muted">
+            Ajouter des nouvelles adresses e-mail séparées par un point-virgule " ; "
+        </small>
+    </div>
+    <div class="col-sm-12 text-center mt-3">
+        <input type="button" value="Visualiser" class="btn btn-info ckeditor-preview" data-ckeditor-instance="fait_marquant_description" />
+        <input type="submit" onclick="this.disabled=true;this.value='{{ "sending..."|trans }}';this.form.submit();" value="{{ 'publish' | trans }}" class="btn btn-success" />
+    </div>
+</div>
+
+{{ form_end(form) }}

@@ -1,0 +1,189 @@
+
+  .corp_app .timeline{
+    border-left: 8px solid #ce352c;
+  }
+  .lab_app .timeline{
+    border-left: 8px solid #416C94;
+  }
+  .timeline {
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    color: #333;
+    margin: 50px auto;
+    letter-spacing: 0.5px;
+    position: relative;
+    line-height: 1.4em;
+    padding: 20px;
+    list-style: none;
+    text-align: left;
+  }
+  
+  .timeline h1,
+  .timeline h2,
+  .timeline h3 {
+    text-align: left;
+  }
+  .timeline h4 {
+    font-size: 1em;
+  }
+  
+  .timeline .event {
+    border-bottom: 1px solid rgba(160, 160, 160, 0.2);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .timeline .event img {
+    max-width: 100%;
+  }
+  
+  .timeline .event:last-of-type {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border: none;
+  }
+  
+  .timeline .event:before,
+  .timeline .event:after {
+    position: absolute;
+    display: block;
+    top: 0;
+  }
+  
+  .timeline .event:before {
+    left: -177.5px;
+    color: #212121;
+    content: attr(data-date);
+    text-align: right;
+    /*  font-weight: 100;*/
+    
+    font-size: 16px;
+    min-width: 120px;
+  }
+
+  .corp_app .timeline .event:after{
+    box-shadow: 0 0 0 8px #ce352c;
+  }
+
+  .timeline .eventpdf {
+    /* page-break-before: always;
+      page-break-after: always;
+      page-break-inside: always;
+      break-after: always;
+      break-inside: always;
+      break-before: always; */
+      break-after : page;
+      page-break-inside: avoid
+  }
+
+  .timeline .eventpdf:before,
+  .timeline .eventpdf:after  {
+    position: none !important;
+    box-shadow: none !important;
+    left:0 !important;
+    background: transparent !important;
+    border-radius:0 !important;
+    height:0 !important;
+    width: 0 !important;
+    top:0 !important;
+  }
+
+  .lab_app .timeline .event:after{
+    box-shadow: 0 0 0 8px #416C94;
+  }
+  
+  .timeline .event:after {
+    left: -30px;
+    background: white;
+    border-radius: 50%;
+    height: 11px;
+    width: 11px;
+    content: "";
+    top: 5px;
+  }
+
+  .timeline .event .event-content h1 {
+    font-size: 1.4em;
+  }
+  .timeline .event .event-content h2 {
+    font-size: 1.3em;
+  }
+  .timeline .event .event-content h3 {
+    font-size: 1.2em;
+  }
+  .timeline .event .event-content h4 {
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+  .timeline .event .event-content h5 {
+    font-size: 1em;
+    font-weight: bold;
+  }
+  .timeline .event .event-content h6 {
+    font-size: 0.9em;
+    font-weight: bold;
+  }
+  /**/
+  /*——————————————
+  Responsive Stuff
+  ———————————————*/
+  
+  @media (max-width: 945px) {
+    .timeline .event::before {
+      left: 0.5px;
+      top: 20px;
+      min-width: 0;
+      font-size: 13px;
+    }
+    .timeline p {
+      padding-top: 20px;
+    }
+    section.lab h3.card-title {
+      padding: 5px;
+      font-size: 16px
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .timeline .event::before {
+      left: 0.5px;
+      top: 20px;
+      min-width: 0;
+      font-size: 13px;
+    }
+    .timeline .event:nth-child(1)::before,
+    .timeline .event:nth-child(3)::before,
+    .timeline .event:nth-child(5)::before {
+      top: 38px;
+    }
+    .timeline p {
+      padding-top: 20px;
+    }
+  }
+  /*——————————————
+  others
+  ———————————————*/
+  
+  a.portfolio-link {
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+  }
+
+  .title-parent {
+    position: relative;
+  }
+
+  .roundpdf {   
+    position: absolute;
+    top: 5px;
+    margin-right: 10px;
+
+    height: 11px;
+    width: 11px;
+    box-shadow: 0 0 0 5px #ce352c;
+    background: white !important;
+    border-radius: 50%;    
+  }

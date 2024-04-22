@@ -1,0 +1,32 @@
+{% extends 'mail/layouts/base_mail.html.twig' %}
+
+{% block title %}Fin de l’offre d’essai RDI-Manager pour votre société{% endblock %}
+
+{% block body %}
+    <row>
+        <columns>
+            <p>Bonjour,</p>
+
+            <p>
+                En qualité d’administrateur de l’espace RDI-Manager de la société {{ societe.raisonSociale }}, vous êtes
+                informé de la fin de votre période d’essai sur la plateforme. Jusqu’ici vous bénéficier de l’Offre
+                Premium RDI ; vous allez être automatiquement basculé sur l’Offre Starter RDI.
+            </p>
+
+            <p>
+                Il s’agit d’une offre gratuite, limitée en fonctionnalités ; qui reste cependant adaptée aux jeunes
+                pousses en phase de lancement.
+            </p>
+
+            <p>
+                Vous pouvez à tout moment contacter le service client RDI-Manager pour réajuster votre offre et profiter
+                pleinement du potentiel de RDI.
+            </p>
+            <br>
+
+            <button onclick="location.href='mailto:{{ rdi_mail_address }}?subject=Société {{ societe.raisonSociale }} | Mise à jour offre RDI';">
+                Contactez le service client RDI-Manager
+            </button>
+        </columns>
+    </row>
+{% endblock %}

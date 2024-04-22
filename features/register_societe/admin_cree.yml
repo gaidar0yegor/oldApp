@@ -1,0 +1,22 @@
+App\Entity\User:
+    _admin:
+        nom: NomAdmin
+        prenom: PrénomAdmin
+        email: admin@societe.dev
+        password: admin
+
+App\Entity\SocieteUser:
+    admin:
+        user: '@_admin'
+        role: <(App\Security\Role\RoleSociete::ADMIN)>
+        societe: '@societe'
+
+App\Entity\SocieteUserPeriod:
+    admin_period:
+        societeUser: '@admin'
+        dateEntry: null
+        dateLeave: null
+
+App\Entity\Societe:
+    societe:
+        raisonSociale: MaSociétéTest

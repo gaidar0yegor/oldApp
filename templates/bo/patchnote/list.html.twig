@@ -1,0 +1,63 @@
+{% extends 'bo/base.html.twig' %}
+
+{% block title %}Note de mise à jour | {{ parent() }}{% endblock %}
+
+{% block body %}
+
+    <h1>Note de mise à jour</h1>
+
+    <div class="my-3 text-right">
+        <div class="btn-group">
+            <a href="#" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-lg fa-plus" aria-hidden="true"></i>
+                {{ 'patchnote'|trans }}
+            </a>
+            <div class="dropdown-menu">
+                <a
+                        class="dropdown-item"
+                        href="{{ path('corp_app_bo_patchnote_new', { 'rdi_app' : constant('App\\Entity\\Patchnote::CORP_APP')}) }}"
+                >
+                    {{ 'corp_app_name'|trans }}
+                </a>
+                <a
+                        class="dropdown-item"
+                        href="{{ path('corp_app_bo_patchnote_new', { 'rdi_app' : constant('App\\Entity\\Patchnote::LAB_APP')}) }}"
+                >
+                    {{ 'lab_app_name'|trans }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <table id="patchnotes_list_dt" class="table datatable custom-datatable hover">
+        <thead>
+        <tr>
+            <th>Version</th>
+            <th>Rdi App</th>
+            <th>Date</th>
+            <th>Brouillon</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for patchnote in patchnotes %}
+            <tr>
+                <td>{{ patchnote.version }}</td>
+                <td class="text-left">{{ (patchnote.rdiApp ~ '_name') | trans }}</td>
+                <td class="text-center" data-sort='{{ patchnote.date|date('Ymd') }}'>{{ patchnote.date|date('d/m/Y') }}</td>
+                <td class="text-center">{% if patchnote.isDraft %}<span class="badge badge-pill badge-info">Brouillon</span>{% endif %}</td>
+                <td class="text-center">
+                    <a class="btn-rdi-icon text-success" href="{{ path('corp_app_bo_patchnote_list', { 'preview': patchnote.id }) }}" title="Visualiser"><i class="fa fa-lg fa-eye"></i></a>
+                    <a class="btn-rdi-icon text-warning" href="{{ path('corp_app_bo_patchnote_update', { 'id': patchnote.id }) }}" title="{{ 'edit_btn'|trans }}"><i class="fa fa-lg fa-edit"></i></a>
+                    <a class="btn-rdi-icon text-danger" href="{{ path('corp_app_bo_patchnote_delete', { 'id': patchnote.id }) }}" title="{{ 'delete'|trans }}"><i class="fa fa-lg fa-trash"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if previewPatchnote %}
+        {{ include('_patchnote.html.twig', { 'testPreview' : true ,'patchnotes' : [previewPatchnote] }) }}
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,50 @@
+back_office:
+    type: annotation
+    prefix: /back-office/
+    resource: ../src/Controller/BO/
+
+corp:
+    type: annotation
+    prefix: /corp/
+    resource: ../src/Controller/CorpApp/
+    defaults:
+        _app: CorpApp
+        _app_name: Journal collaboratif
+        _app_class: corp_app
+
+corp_admin:
+    type: annotation
+    prefix: /corp/admin/
+    resource: ../src/Controller/CorpApp/FO/Admin/
+    defaults:
+        _app: CorpApp
+        _app_name: Journal collaboratif
+        _app_class: corp_app
+
+corp_mon_equipe:
+    type: annotation
+    prefix: /corp/mon_equipe/
+    resource: ../src/Controller/CorpApp/FO/Equipe/
+    defaults:
+        _app: CorpApp
+        _app_name: Journal collaboratif
+        _app_class: corp_app
+
+lab:
+    type: annotation
+    prefix: /lab/
+    resource: ../src/Controller/LabApp/
+    controller: App\Controller\LabApp\CommingSoonController::index # à enlever si le cahier de labo est prêt (pour le comming soon)
+    defaults:
+        _app: LabApp
+        _app_name: Cahier de laboratoire
+        _app_class: lab_app
+
+lab_admin:
+    type: annotation
+    prefix: /lab/admin/
+    resource: ../src/Controller/LabApp/FO/Admin/
+    defaults:
+        _app: LabApp
+        _app_name: Cahier de laboratoire
+        _app_class: lab_app

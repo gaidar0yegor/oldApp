@@ -1,0 +1,28 @@
+<footer id="footer" style="
+    {% if app.request.attributes.get('_app') == "CorpApp" %}
+        {{ userContext|apply_code_color_societe('background-image')  }}
+    {% elseif app.request.attributes.get('_app') == "LabApp" %}
+        background-color:#416C94;
+    {% endif %}
+    ">
+    <p class="d-none d-md-inline">RDI-Manager
+        {% if app.request.attributes.get('_app_class') %}
+        <a href="{{ path('app_patchnote_historic', {'rdi_app' : app.request.attributes.get('_app_class')}) }}" target="_blank" title="{{ 'show_historic_patch_note'|trans }}" class="text-monospace">{{ shivas_app_version }}</a>
+        {% else %}
+        <span class="text-monospace">{{ shivas_app_version }}</span>
+        {% endif %}
+    </p>
+    <p>
+        &copy;
+        <span class="d-none d-md-inline">Copyright</span>
+        <a href="https://rdimanager.com/" target="_blank">RDI Manager</a>
+    </p>
+    <img class="logofooter" src="{{ asset('build/assets/img/logosignFooterRDI.png') }}" alt="RDI Manager">
+    <p>
+        <a href="mailto:contact@rdimanager.com?subject=Feedbacks&body=Ecrivez+ici+vos+retours+et+suggestions+:">contact@rdimanager.com</a>
+    </p>
+    <p class="social-links d-none d-md-inline">
+        <a href="{{ path('app_recommander') }}" title="Recommander RDI-Manager"><i class="fa fa-share-alt" aria-hidden="true"></i></a>
+        <a href="https://www.linkedin.com/company/rdi-manager/" title="LinkedIn" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+    </p>
+</footer>

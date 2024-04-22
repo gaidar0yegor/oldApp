@@ -1,0 +1,353 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    # Default request context, used i.e to create url from commands
+    router.request_context.host: '%env(REQUEST_BASE_HOST)%'
+    router.request_context.base_url: '%env(REQUEST_BASE_PATH)%'
+    asset.request_context.base_path: '%router.request_context.base_url%'
+
+    locales:
+        fr: Français
+        en: English
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+
+    App\Command\NotificationCommand\:
+        resource: '../src/Command/NotificationCommand/'
+        calls:
+            - setSocieteRepository: ['@App\Repository\SocieteRepository']
+
+    App\Service\SocieteInitializer:
+        tags:
+            -
+                name: 'doctrine.orm.entity_listener'
+                event: 'postPersist'
+                entity: 'App\Entity\Societe'
+
+    App\Command\TestSmsCommand:
+        $smsDsn: '%env(SMS_DSN)%'
+
+    Twig\Extensions\IntlExtension: ~
+    App\Twig\DatabaseGlobalsExtension: null
+
+    App\Form\MonCompteType:
+        $locales: '%locales%'
+
+    App\Service\RdiMailer:
+        $mailFrom: '%env(MAILER_FROM)%'
+
+    App\Service\Timesheet\Export\TimesheetExporter:
+        $exportFormats: !tagged_iterator app.timesheet_export.format
+
+    App\Service\Timesheet\Export\Format\:
+        resource: '../src/Service/Timesheet/Export/Format/'
+        tags: ['app.timesheet_export.format']
+
+    App\Service\Timesheet\Export\Format\SpreadsheetExport:
+        tags: ['app.timesheet_export.format']
+        arguments:
+            $tmpDir: '%kernel.cache_dir%/timesheets-export-tmp'
+
+    App\Controller\RecommanderController:
+        $defaultMailFrom: '%env(MAILER_FROM)%'
+
+    App\Listener\SocieteUserPeriodEntityListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\SocieteUserPeriod }
+
+    App\Activity\ActivityService:
+        arguments:
+            $activityTypes: !tagged_iterator { tag: 'app.activity_type', default_index_method: 'getType' }
+        calls:
+            - setFallbackActivityType: ['@App\Activity\FallbackActivityType']
+
+    App\Activity\Type\:
+        resource: '../src/Activity/Type/'
+        tags: ['app.activity_type']
+
+    App\Activity\Type\FaitMarquantCreatedActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\FaitMarquant }
+
+    App\Activity\Type\FaitMarquantModifiedActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\FaitMarquant }
+
+    App\Activity\Type\FaitMarquantCommentCreated:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\FaitMarquantComment }
+
+    App\Activity\Type\UserMentionedFaitMarquantActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\FaitMarquant }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\FaitMarquant }
+
+    App\Activity\Type\EvenementCreatedActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\Evenement }
+
+    App\Activity\Type\EvenementModifiedActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\Evenement }
+
+    App\Activity\Type\ProjetPlanningCreatedActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\ProjetPlanning }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\ProjetPlanning }
+
+    App\Activity\Type\ProjetCreatedActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\Projet }
+
+    App\Service\RdiScore\ProjetDomainKeywordsListener:
+        tags:
+            - 'app.domain_keywords_generator'
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\Projet }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\Projet }
+
+    App\Activity\Type\ProjetSuspendedActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\ProjetSuspendPeriod }
+
+    App\Activity\Type\ProjetResumedActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\ProjetSuspendPeriod }
+
+    App\Activity\Type\UserQuitteSociete:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\SocieteUserPeriod }
+
+    App\Activity\Type\AdminEjectUser:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\SocieteUser }
+
+    App\Activity\Type\ProjetParticipantRoleModifiedActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\ProjetParticipant }
+
+    App\Activity\Type\UserRejointSociete:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\SocieteUserPeriod }
+
+    App\Activity\Type\PlanningTaskCompleted:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: App\Entity\ProjetPlanningTask }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\ProjetPlanningTask }
+
+    App\Activity\Type\SocieteCreatedBoActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\Societe }
+
+    App\Activity\Type\ProjetCreatedBoActivity:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\Projet }
+
+    App\Listener\ProjetPlanningListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\ProjetPlanning }
+
+    App\Listener\FichierProjetListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: App\Entity\FichierProjet }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\FichierProjet }
+
+    App\Listener\EvenementParticipantListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: App\Entity\EvenementParticipant }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\EvenementParticipant }
+
+    App\Listener\DossierFichierProjetListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: App\Entity\DossierFichierProjet }
+
+    App\Notification\Mail\EvenementInvitation:
+        tags:
+            - 'app.activity_type'
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\Evenement }
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\Evenement }
+
+    App\Service\EntityLink\EntityLinkGenerator\:
+        resource: '../src/Service/EntityLink/EntityLinkGenerator/'
+        tags: ['app.entity_link_generator']
+
+    App\Service\EntityLink\EntityLinkService:
+        $linkGenerators: !tagged_iterator { tag: 'app.entity_link_generator', default_index_method: 'supportsEntity' }
+
+    Elasticsearch\Client:
+        lazy: true
+        factory: ['App\Service\RdiScore\ElasticSearchClientFactory', 'createClient']
+        arguments:
+            - '%env(ELASTIC_SEARCH_HOST)%'
+
+    App\Service\RdiScore\ScoreUpdater:
+        $projetIndex: '%env(ELASTIC_SEARCH_INDEX_PROJET)%'
+
+    App\Service\RdiScore\RdiKeywordsGeneratorFromAPI:
+        $apiUrl: '%env(ARCHIVES_OUVERTES_KEYWORDS_API)%'
+
+    App\Onboarding\Step\:
+        resource: '../src/Onboarding/Step/'
+        tags: ['app.onboarding_step']
+
+    App\Onboarding\Onboarding:
+        $onboardingSteps: !tagged_iterator { tag: 'app.onboarding_step', default_priority_method: getPriority }
+
+    App\HelpText\HelpText:
+        $templatesDir: '%twig.default_path%'
+
+    App\Slack\Slack:
+        $slackClientId: '%env(SLACK_APP_CLIENT_ID)%'
+        $slackClientSecret: '%env(SLACK_APP_CLIENT_SECRET)%'
+
+    App\License\Decryption:
+        arguments:
+            $licensePublicKeyUrl: '%env(LICENSE_PUBLIC_KEY_URL)%'
+            $licensePublicKeyFilename: '%env(resolve:LICENSE_PUBLIC_KEY_FILENAME)%'
+
+    App\License\QuotaService:
+        $licenseQuotas: !tagged_iterator app.license_quota
+
+    App\License\Quota\:
+        resource: '../src/License/Quota/'
+        lazy: true
+        tags:
+            - { name: app.license_quota }
+
+    App\License\Quota\ActiveProjetQuota:
+        lazy: true
+        tags:
+            - { name: app.license_quota }
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: App\Entity\Projet }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: App\Entity\Projet }
+
+    App\License\Quota\ContributeurQuota:
+        lazy: true
+        tags:
+            - { name: app.license_quota }
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: App\Entity\ProjetParticipant }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: App\Entity\ProjetParticipant }
+
+    App\License\Listener\LicenseExpiredListener:
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    App\LicenseGeneration\Listener\SocieteCreatedListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\Societe }
+
+    App\LicenseGeneration\Command\GenerateLicensesCommand:
+        autoconfigure: false
+
+    app.license_generation.command.generate_license.starter:
+        class: App\LicenseGeneration\Command\GenerateLicensesCommand
+        arguments:
+            $licenseFactory: '@App\License\Factory\StarterLicenseFactory'
+        tags:
+            - { name: console.command, command: app:license-generation:generate:starter-license }
+
+    app.license_generation.command.generate_license.standard:
+        class: App\LicenseGeneration\Command\GenerateLicensesCommand
+        arguments:
+            $licenseFactory: '@App\License\Factory\StandardLicenseFactory'
+        tags:
+            - { name: console.command, command: app:license-generation:generate:standard-license }
+
+    app.license_generation.command.generate_license.premium:
+        class: App\LicenseGeneration\Command\GenerateLicensesCommand
+        arguments:
+            $licenseFactory: '@App\License\Factory\PremiumLicenseFactory'
+        tags:
+            - { name: console.command, command: app:license-generation:generate:premium-license }
+
+    App\LicenseGeneration\Command\GeneratePrivateKeyCommand:
+        $privateKeyFile: '%env(resolve:LICENSE_GENERATION_PRIVATE_KEY)%'
+        $publicKeyFile: '%env(resolve:LICENSE_GENERATION_PUBLIC_KEY)%'
+
+    App\LicenseGeneration\Encryption:
+        $privateKeyFile: '%env(resolve:LICENSE_GENERATION_PRIVATE_KEY)%'
+        $publicKeyFile: '%env(resolve:LICENSE_GENERATION_PUBLIC_KEY)%'
+
+    App\LicenseGeneration\Form\QuotaType:
+        $licenseQuotas: !tagged_iterator app.license_quota
+
+    App\Notification\Mail\FaitMarquantCreated:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\FaitMarquant }
+
+    App\Notification\Mail\FaitMarquantCommentCreated:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\FaitMarquantComment }
+
+    App\Localization\UserEntityListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\User }
+
+    App\Localization\TwigExtension:
+        $locales: '%locales%'
+
+    App\File\FileHandler\AvatarHandler:
+        $filesAvatarUri: '%filesAvatarUri%'
+
+    App\File\FileHandler\EtudeBannerHandler:
+        $filesAvatarUri: '%filesAvatarUri%'
+        $defaultEtudeBannerUri: '%defaultEtudeBannerUri%'
+
+    App\File\CreateDefaultAvatarOnNewUser:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\User }
+
+    App\Onboarding\Listener\NextStepNotificationListener:
+        tags:
+            -
+                name: 'doctrine.orm.entity_listener'
+                event: 'prePersist'
+                entity: 'App\Entity\SocieteUser'
+                method: societeUserUpdating
+            -
+                name: 'doctrine.orm.entity_listener'
+                event: 'postPersist'
+                entity: 'App\Entity\Projet'
+                method: projetPersisted
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones

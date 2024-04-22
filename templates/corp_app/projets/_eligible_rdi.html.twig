@@ -1,0 +1,13 @@
+{% if projet.annualRdiScores | length > 0 %}
+    <span style="cursor: help;"
+          title="{% for year, score in projet.annualRdiScores %} {{ year }} : <strong>{{ score * 100 }}%</strong><br> {% endfor %}"
+          class="badge badge-{{ projet.rdi ? 'success' : ( max(projet.annualRdiScores) >= 0.3 ? 'warning' : 'danger') }}">
+            {{ projet.rdi ? 'Éligible RDI' : 'Éligibilité' }}
+    </span>
+{% else %}
+    <span style="cursor: help;"
+          title="Aucun domaine sélectionné pour le projet"
+          class="badge badge-secondary">
+            NA
+    </span>
+{% endif %}

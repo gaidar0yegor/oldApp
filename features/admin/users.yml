@@ -1,0 +1,68 @@
+App\Entity\User:
+    _admin:
+        nom: Eureka
+        prenom: Admin
+        email: admin@societe.dev
+        password: admin
+    _user:
+        nom: Eureka
+        prenom: Utilisateur
+        email: user@societe.dev
+        password: user
+    _user_autre_societe:
+        nom: AutreSociete
+        prenom: Utilisateur
+        email: autre-user@societe.dev
+
+App\Entity\SocieteUser:
+    admin:
+        user: '@_admin'
+        role: <(App\Security\Role\RoleSociete::ADMIN)>
+        societe: '@societe'
+    user:
+        user: '@_user'
+        role: <(App\Security\Role\RoleSociete::USER)>
+        societe: '@societe'
+    user_autre_societe:
+        user: '@_user_autre_societe'
+        role: <(App\Security\Role\RoleSociete::USER)>
+        societe: '@societe2'
+
+App\Entity\SocieteUserPeriod:
+    admin_period:
+        societeUser: '@admin'
+        dateEntry: <(new DateTime("2010-11-01"))>
+        dateLeave: null
+    user_period:
+        societeUser: '@user'
+        dateEntry: <(new DateTime("2010-11-01"))>
+        dateLeave: null
+    user_autre_societe_period:
+        societeUser: '@user_autre_societe'
+        dateEntry: <(new DateTime("2010-11-01"))>
+        dateLeave: null
+
+App\Entity\Societe:
+    societe:
+        raisonSociale: SociétéTest
+        siret: 111111111
+        heuresParJours: ~
+    societe2:
+        raisonSociale: AutreSociété
+        siret: 222222222
+
+App\Entity\Projet:
+    projet:
+        titre: ProjetTest
+        acronyme: PT
+        societe: '@societe'
+
+App\Entity\ProjetParticipant:
+    user_projet:
+        societeUser: '@user'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::CONTRIBUTEUR)>
+    admin_projet:
+        societeUser: '@admin'
+        projet: '@projet'
+        role: <(App\Security\Role\RoleProjet::CDP)>

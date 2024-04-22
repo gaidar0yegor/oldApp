@@ -1,0 +1,31 @@
+{% extends 'mail/layouts/base_mail.html.twig' %}
+
+{% block title %}Changement de votre offre RDI-Manager{% endblock %}
+
+{% block body %}
+    <row>
+        <columns>
+            <p>Bonjour,</p>
+
+            {% if oldLicense is not null %}
+                <p>
+                    En qualité d’administrateur de l’espace RDI-Manager de la société <strong>{{ societe.raisonSociale }}</strong>, nous vous informons
+                    que votre offre RDI-Manager est passée de l’offre <strong>{{ oldLicense.productKey | trans }}</strong> vers l’offre <strong>{{ newLicense.productKey | trans }}</strong>.
+                </p>
+            {% else %}
+                <p>
+                    En qualité d’administrateur de l’espace RDI-Manager de la société <strong>{{ societe.raisonSociale }}</strong>, nous vous informons
+                    que vous pouvez profiter dès à présent de l'offre <strong>{{ newLicense.productKey | trans }}</strong> sur RDI-Manager.
+                </p>
+            {% endif %}
+
+            <p>
+                Les différentes offres RDI-Manager sont présentées ici : <a href="https://rdimanager.com/index.html#pricing">Offres RDI</a>
+            </p>
+
+            <p>
+                Vous pouvez à tout moment contacter le service client RDI-Manager pour réajuster votre offre et profiter pleinement du potentiel de RDI.
+            </p>
+        </columns>
+    </row>
+{% endblock %}

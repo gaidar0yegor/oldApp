@@ -1,0 +1,20 @@
+<div class="message-validation text-center">
+    {% if submitted %}
+        <p class="text-success">
+            <i class="fa fa-check" aria-hidden="true"></i>
+            {{ 'you_submitted_this_month_on'|trans({'%date%': modifiedAt|format_date}) }}
+        </p>
+    {% endif %}
+
+    {% if not isUserBelongingToSociete %}
+        <p class="text-danger">
+            <i class="fa fa-user-times" aria-hidden="true"></i>
+            {{ 'this_month_not_in_company'|trans }}
+        </p>
+    {% elseif not submitted and currentOrPreviousMonth(cra.mois) %}
+        <p class="text-warning">
+            <i class="fa fa-exclamation" aria-hidden="true"></i>
+            {{ 'you_should_validate_this_month'|trans }}
+        </p>
+    {% endif %}
+</div>

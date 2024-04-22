@@ -1,0 +1,65 @@
+.user-events-notifications-list, .user-rappels-notifications-list, .societe-help-icon {
+    margin-right: 0.5rem;
+    padding-right: 0.5rem;
+    height: 28px;
+    border-right: 1px white solid;
+}
+.user-notifications-list, .user-events-notifications-list, .user-rappels-notifications-list {
+    .dropdown-menu {
+        width: 280px;
+
+        @media (min-width: 768px) {
+            width: 400px;
+        }
+
+        &.dropdown-menu-right {
+            left: 0;
+            right: auto;
+
+            @media (min-width: 992px) {
+                left: auto;
+                right: 0;
+            }
+        }
+
+        .dropdown-header {
+            text-transform: uppercase;
+        }
+
+        .rdi-dropdown-scroll {
+            overflow-y: auto;
+            max-height: 340px;
+        }
+
+        .events-dropdown-scroll {
+            overflow-y: auto;
+            max-height: 340px;
+        }
+    }
+
+    .dropdown-toggle {
+        text-decoration: none;
+
+        &::after {
+            display: none;
+        }
+
+        .badge{
+            margin-left: -10px;
+        }
+    }
+
+    .dropdown-item {
+        white-space: normal;
+
+        &:active {
+            color: #16181b;
+            text-decoration: none;
+            background-color: #f8f9fa;
+        }
+
+        a {
+            padding-left: 0;
+        }
+    }
+}

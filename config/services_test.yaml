@@ -1,0 +1,31 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Tests\Behat\:
+        resource: '../tests/Behat/*'
+
+    App\Listener\KernelExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, priority: -100 }
+
+    App\Tests\Behat\RdiContext:
+        arguments:
+            $loader: '@fidry_alice_data_fixtures.doctrine.purger_loader'
+            $fixturesBasePath: 'features/'
+
+    App\LicenseGeneration\Listener\SocieteCreatedListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: App\Entity\Societe }
+        calls:
+            - setDefaultLicenseFactory: ['@App\License\Factory\PremiumLicenseFactory']
+
+    App\Tests\Activity\:
+        resource: '../tests/Activity/'
+
+    App\Activity\ActivityService:
+        arguments:
+            $activityTypes: !tagged_iterator { tag: 'app.activity_type', default_index_method: 'getType' }
+        calls:
+            - setFallbackActivityType: ['@App\Tests\Activity\TestActivityType']

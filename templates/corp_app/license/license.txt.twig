@@ -1,0 +1,21 @@
+{{ "licence_title"|trans }} {{ license.name }}
+
+{{ "tied_society"|trans }} {{ license.societe.raisonSociale }}
+
+{% if license.description %}
+    {{- license.description }}
+
+{% endif -%}
+
+{{ "valid_until"|trans }} {{ license.expirationDate|format_date(pattern='d MMMM yyyy') }}.
+
+{% if license.quotas.contributeurs is defined -%}
+    {{ "max_contrib"|trans }} {{ license.quotas.contributeurs }}
+{% endif %}
+{% if license.quotas.activeProjet is defined -%}
+    {{ "max_projects"|trans }} {{ license.quotas.activeProjet }}
+{% endif %}
+
+{{ separator }}
+
+{{ rawData }}

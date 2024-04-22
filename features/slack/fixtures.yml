@@ -1,0 +1,30 @@
+App\Entity\User:
+    _admin:
+        nom: Eureka
+        prenom: Admin
+        email: admin@societe.dev
+        password: admin
+
+App\Entity\SocieteUser:
+    admin:
+        user: '@_admin'
+        role: <(App\Security\Role\RoleSociete::ADMIN)>
+        societe: '@societe'
+
+App\Entity\SocieteUserPeriod:
+    admin_period:
+        societeUser: '@admin'
+        dateEntry: null
+        dateLeave: null
+
+App\Entity\SlackAccessToken:
+    channel:
+        societe: '@societe'
+        teamName: Mon-Espace-Slack
+        incomingWebhookChannel: '#general'
+        scope: ['scope']
+        accessToken: xxx
+
+App\Entity\Societe:
+    societe:
+        raisonSociale: SociétéTest
