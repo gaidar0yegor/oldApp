@@ -1,7 +1,3 @@
-# RDI Manager 01
-
-Projet RDI Manager.
-
 ## Installation
 
 Requires:
